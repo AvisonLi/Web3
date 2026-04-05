@@ -19,7 +19,7 @@ public class UserController {
     private UserService userService;
 
     @Autowired
-    private PasswordEncoder passwordEncoder;   // 添加这一行
+    private PasswordEncoder passwordEncoder;
 
     @GetMapping("/login")
     public String login() {
@@ -58,7 +58,7 @@ public class UserController {
         if (password != null && !password.trim().isEmpty()) {
             user.setPassword(passwordEncoder.encode(password));
         }
-        userService.updateUser(user);   // 调用实体更新方法
+        userService.updateUser(user);
         return "redirect:/profile";
     }
 }

@@ -24,5 +24,6 @@
     <button><fmt:message key="register"/></button>
 </form:form>
 <a href="/login"><fmt:message key="login"/></a>
+<a href="/"><fmt:message key="home"/></a>
 </body>
 </html>

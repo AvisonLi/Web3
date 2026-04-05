@@ -48,7 +48,26 @@ public class PollService {
 
     @Transactional
     public void deletePoll(Long id) {
-        pollRepo.deleteById(id);
+        Poll poll = pollRepo.findById(id)
+                .orElseThrow(() -> new RuntimeException("Poll not found with id: " + id));
+
+        List<PollOption> options = poll.getOptions();
+        if (options != null && !options.isEmpty()) {
+            for (PollOption option : options) {
+                List<VoteRecord> votesForOption = voteRepo.findBySelectedOption(option);
+                if (votesForOption != null && !votesForOption.isEmpty()) {
+                    voteRepo.deleteAll(votesForOption);
+                }
+            }
+            optionRepo.deleteAll(options);
+        }
+
+        List<Comment> comments = commentRepo.findByPoll(poll);
+        if (comments != null && !comments.isEmpty()) {
+            commentRepo.deleteAll(comments);
+        }
+
+        pollRepo.delete(poll);
     }
 
     @Transactional
