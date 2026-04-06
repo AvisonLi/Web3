@@ -12,7 +12,8 @@
 </div>
 <h2><fmt:message key="update.profile"/></h2>
 <form method="post" action="/profile/update">
-    <fmt:message key="fullname"/>: <input disabled type="text" name="fullName" value="${user.fullName}"/><br/>
+    <fmt:message key="username"/>: <input type="text" value="${user.username}" disabled/><br/>
+    <fmt:message key="fullname"/>: <input type="text" name="fullName" value="${user.fullName}"/><br/>
     <fmt:message key="email"/>: <input type="email" name="email" value="${user.email}"/><br/>
     <fmt:message key="phone"/>: <input type="text" name="phone" value="${user.phone}"/><br/>
     <fmt:message key="new.password"/>: <input type="password" name="password"/><br/>

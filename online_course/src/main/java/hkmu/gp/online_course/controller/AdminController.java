@@ -49,8 +49,10 @@ public class AdminController {
         dto.setFullName(user.getFullName());
         dto.setEmail(user.getEmail());
         dto.setPhone(user.getPhone());
+        dto.setUsername(user.getUsername());
         model.addAttribute("userDto", dto);
         model.addAttribute("userId", id);
+        model.addAttribute("user", user);
         return "editUser";
     }
 
