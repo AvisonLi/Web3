@@ -13,7 +13,7 @@
 </div>
 <h2><fmt:message key="edit.user"/></h2>
 <form:form method="post" modelAttribute="userDto" action="/admin/user/edit/${userId}">
-    <fmt:message key="username"/>: <input type="text" value="${userDto.username}" disabled/><br/>
+    <fmt:message key="username"/>: ${user.username}<br/>
     <fmt:message key="fullname"/>: <form:input path="fullName"/><br/>
     <fmt:message key="email"/>: <form:input path="email"/><br/>
     <fmt:message key="phone"/>: <form:input path="phone"/><br/>

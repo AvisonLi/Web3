@@ -16,9 +16,8 @@ public class UserService {
     private UserRepository userRepo;
 
     @Autowired
-    private PasswordEncoder passwordEncoder;   // 注入 PasswordEncoder
+    private PasswordEncoder passwordEncoder;
 
-    // 注册方法（保持不变）
     public void register(UserDto dto, String role) {
         User user = new User();
         user.setUsername(dto.getUsername());
@@ -38,12 +37,10 @@ public class UserService {
         return userRepo.findAll();
     }
 
-    // 方法1：通过实体更新（用于用户自己更新个人信息）
     public void updateUser(User user) {
         userRepo.save(user);
     }
 
-    // 方法2：通过 ID 和 DTO 更新（用于管理员编辑用户）
     public void updateUser(Long id, UserDto dto) {
         User user = userRepo.findById(id).orElseThrow();
         user.setFullName(dto.getFullName());

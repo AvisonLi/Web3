@@ -57,7 +57,7 @@ public class AdminController {
     }
 
     @PostMapping("/user/edit/{id}")
-    public String updateUser(@PathVariable Long id, @Valid UserDto dto) {
+    public String updateUser(@PathVariable Long id,UserDto dto) {
         userService.updateUser(id, dto);
         return "redirect:/admin/users";
     }
