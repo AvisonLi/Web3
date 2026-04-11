@@ -34,7 +34,14 @@
 
 <h3><fmt:message key="comments"/></h3>
 <c:forEach items="${lecture.comments}" var="c">
-    <div><b>${c.author.fullName}</b> (${c.createdAt}): ${c.content}</div>
+    <div class="comment">
+        <b>${c.author.fullName}</b> (${c.createdAt}): ${c.content}
+        <sec:authorize access="hasRole('TEACHER')">
+            <a href="/admin/lecture/comment/delete/${c.id}?lectureId=${lecture.id}"
+               onclick="return confirm('<fmt:message key="confirm.delete"/>')"
+               style="color: red; margin-left: 10px;">[<fmt:message key="delete"/>]</a>
+        </sec:authorize>
+    </div>
 </c:forEach>
 
 <sec:authorize access="hasAnyRole('STUDENT','TEACHER')">

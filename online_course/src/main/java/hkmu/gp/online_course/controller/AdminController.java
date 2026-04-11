@@ -104,6 +104,20 @@ public class AdminController {
         return "redirect:/";
     }
 
+    @GetMapping("/lecture/comment/delete/{commentId}")
+    public String deleteLectureComment(@PathVariable Long commentId,
+                                       @RequestParam Long lectureId) {
+        lectureService.deleteComment(commentId);
+        return "redirect:/lecture/" + lectureId;
+    }
+
+    @GetMapping("/poll/comment/delete/{commentId}")
+    public String deletePollComment(@PathVariable Long commentId,
+                                    @RequestParam Long pollId) {
+        pollService.deleteComment(commentId);
+        return "redirect:/poll/" + pollId;
+    }
+
     @PostMapping("/lecture/{id}/upload")
     public String uploadMaterial(@PathVariable Long id, @RequestParam MultipartFile file) throws IOException {
         String uploadDir = "./uploads";
