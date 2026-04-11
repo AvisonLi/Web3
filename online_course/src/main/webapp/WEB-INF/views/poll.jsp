@@ -25,7 +25,7 @@
 </form>
 
 <h3><fmt:message key="comments"/></h3>
-<c:forEach items="${lecture.comments}" var="c">
+<c:forEach items="${poll.comments}" var="c">
     <div class="comment">
         <b>${c.author.fullName}</b> (${c.createdAt}): ${c.content}
         <sec:authorize access="hasRole('TEACHER')">
