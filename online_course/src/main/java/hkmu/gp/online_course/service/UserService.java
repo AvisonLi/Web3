@@ -4,21 +4,53 @@ import hkmu.gp.online_course.dto.UserDto;
 import hkmu.gp.online_course.entity.User;
 import hkmu.gp.online_course.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
 @Service
-public class UserService {
+public class UserService implements UserDetailsService {
 
     @Autowired
-    private UserRepository userRepo;
+    private UserRepository userRepository;
 
     @Autowired
     private PasswordEncoder passwordEncoder;
 
+    @Override
+    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+        User user = userRepository.findByUsername(username)
+                .orElseThrow(() -> new UsernameNotFoundException("User not found: " + username));
+        return org.springframework.security.core.userdetails.User.builder()
+                .username(user.getUsername())
+                .password(user.getPassword())
+                .roles(user.getRole().replace("ROLE_", ""))
+                .build();
+    }
+
+    public List<User> findAll() {
+        return userRepository.findAll();
+    }
+
+    public User findById(Long id) {
+        return userRepository.findById(id).orElseThrow(() -> new RuntimeException("User not found"));
+    }
+
+    public User findByUsername(String username) {
+        return userRepository.findByUsername(username)
+                .orElseThrow(() -> new RuntimeException("User not found"));
+    }
+
+    @Transactional
     public void register(UserDto dto, String role) {
+        if (userRepository.existsByUsername(dto.getUsername())) {
+            throw new RuntimeException("Username already exists");
+        }
         User user = new User();
         user.setUsername(dto.getUsername());
         user.setPassword(passwordEncoder.encode(dto.getPassword()));
@@ -26,37 +58,32 @@ public class UserService {
         user.setEmail(dto.getEmail());
         user.setPhone(dto.getPhone());
         user.setRole(role);
-        userRepo.save(user);
+        userRepository.save(user);
     }
 
-    public User findByUsername(String username) {
-        return userRepo.findByUsername(username).orElse(null);
-    }
-
-    public List<User> findAll() {
-        return userRepo.findAll();
-    }
-
-    public void updateUser(User user) {
-        userRepo.save(user);
-    }
-
+    @Transactional
     public void updateUser(Long id, UserDto dto) {
-        User user = userRepo.findById(id).orElseThrow();
+        User user = findById(id);
         user.setFullName(dto.getFullName());
         user.setEmail(dto.getEmail());
         user.setPhone(dto.getPhone());
         if (dto.getPassword() != null && !dto.getPassword().isEmpty()) {
             user.setPassword(passwordEncoder.encode(dto.getPassword()));
         }
-        userRepo.save(user);
+        userRepository.save(user);
     }
 
+    @Transactional
+    public void updateUser(User user) {
+        userRepository.save(user);
+    }
+
+    @Transactional
     public void deleteUser(Long id) {
-        userRepo.deleteById(id);
+        userRepository.deleteById(id);
     }
 
-    public User findById(Long id) {
-        return userRepo.findById(id).orElse(null);
+    public boolean isUsernameExists(String username) {
+        return userRepository.existsByUsername(username);
     }
 }

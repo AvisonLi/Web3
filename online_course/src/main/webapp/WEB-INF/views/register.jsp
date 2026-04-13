@@ -12,16 +12,31 @@
     <a href="?lang=en">English</a> | <a href="?lang=zh_HK">繁體中文</a>
 </div>
 <h2><fmt:message key="register"/></h2>
+<c:if test="${not empty error}">
+    <div style="color: red; margin-bottom: 15px;">${error}</div>
+</c:if>
+
 <form:form method="post" modelAttribute="user">
-    <fmt:message key="username"/>: <form:input path="username"/><br/>
-    <fmt:message key="password"/>: <form:password path="password"/><br/>
-    <fmt:message key="fullname"/>: <form:input path="fullName"/><br/>
-    <fmt:message key="email"/>: <form:input path="email"/><br/>
-    <fmt:message key="phone"/>: <form:input path="phone"/><br/>
+    <fmt:message key="username"/>: <form:input path="username"/>
+    <form:errors path="username" cssStyle="color:red"/><br/>
+
+    <fmt:message key="password"/>: <form:password path="password"/>
+    <form:errors path="password" cssStyle="color:red"/><br/>
+
+    <fmt:message key="fullname"/>: <form:input path="fullName"/>
+    <form:errors path="fullName" cssStyle="color:red"/><br/>
+
+    <fmt:message key="email"/>: <form:input path="email"/>
+    <form:errors path="email" cssStyle="color:red"/><br/>
+
+    <fmt:message key="phone"/>: <form:input path="phone"/>
+    <form:errors path="phone" cssStyle="color:red"/><br/>
+
     <fmt:message key="role"/>: <select name="role">
     <option value="student"><fmt:message key="student"/></option>
     <option value="teacher"><fmt:message key="teacher"/></option>
 </select><br/>
+
     <button><fmt:message key="register"/></button>
 </form:form>
 <a href="/login"><fmt:message key="login"/></a>

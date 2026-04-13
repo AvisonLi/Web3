@@ -11,6 +11,11 @@
     <a href="?lang=en">English</a> | <a href="?lang=zh_HK">繁體中文</a>
 </div>
 <h2><fmt:message key="user.list"/></h2>
+
+<div style="margin-bottom: 15px;">
+    <a href="/admin/user/add" style="padding: 8px 16px; text-decoration: none; border-radius: 5px; font-weight: bold;"><fmt:message key="add.user.title"/></a>
+</div>
+
 <table border="1">
     <tr><th><fmt:message key="id"/></th><th><fmt:message key="username"/></th><th><fmt:message key="fullname"/></th><th><fmt:message key="email"/></th><th><fmt:message key="role"/></th><th><fmt:message key="action"/></th></tr>
     <c:forEach items="${users}" var="u">
@@ -27,6 +32,7 @@
         </tr>
     </c:forEach>
 </table>
+<br/>
 <a href="/"><fmt:message key="home"/></a>
 </body>
 </html>
