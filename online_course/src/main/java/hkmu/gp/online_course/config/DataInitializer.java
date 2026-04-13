@@ -12,6 +12,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
 
+import java.util.Arrays;
+import java.util.List;
+
 @Component
 public class DataInitializer implements CommandLineRunner {
 
@@ -31,35 +34,84 @@ public class DataInitializer implements CommandLineRunner {
     public void run(String... args) throws Exception {
         if (userService.findAll().isEmpty()) {
 
-            UserDto teacher = new UserDto();
-            teacher.setUsername("teacher");
-            teacher.setPassword("123456");
-            teacher.setFullName("Chan Tai Man (Teacher)");
-            teacher.setEmail("teacher@hkmu.edu.hk");
-            teacher.setPhone("12345678");
-            userService.register(teacher, "ROLE_TEACHER");
+            // --- 1. Users ---
+            createUsers();
 
-            UserDto student1 = new UserDto();
-            student1.setUsername("student1");
-            student1.setPassword("123456");
-            student1.setFullName("Wong Siu Ming");
-            student1.setEmail("student1@hkmu.edu.hk");
-            student1.setPhone("87654321");
-            userService.register(student1, "ROLE_STUDENT");
+            // --- 2. Lectures ---
+            createLectures();
 
-            Lecture lecture = new Lecture("Introduction to Spring Boot", "Learn the basics of Spring Boot, Dependency Injection, and Auto-configuration.");
-            lectureRepo.save(lecture);
+            // --- 3. Polls and Options ---
+            createPolls();
 
-            Poll poll = new Poll("Which topic should be introduced in the next class?");
-            pollRepo.save(poll);
-
-            pollOptionRepo.save(new PollOption("Spring Security", poll));
-            pollOptionRepo.save(new PollOption("Spring Data JPA", poll));
-            pollOptionRepo.save(new PollOption("RESTful APIs", poll));
-            pollOptionRepo.save(new PollOption("Thymeleaf / JSP", poll));
-            pollOptionRepo.save(new PollOption("Microservices", poll));
-
-            System.out.println("Initial data has been successfully loaded!");
+            System.out.println(">>> Initial data for HKMU Online Course has been successfully loaded!");
         }
+    }
+
+    private void createUsers() {
+        UserDto teacher = new UserDto();
+        teacher.setUsername("teacher1");
+        teacher.setPassword("123");
+        teacher.setFullName("Dr. Chan Tai Man");
+        teacher.setEmail("teacher@hkmu.edu.hk");
+        teacher.setPhone("12345678");
+        userService.register(teacher, "ROLE_TEACHER");
+
+        UserDto student1 = new UserDto();
+        student1.setUsername("student1");
+        student1.setPassword("123");
+        student1.setFullName("Wong Siu Ming");
+        student1.setEmail("student1@hkmu.edu.hk");
+        student1.setPhone("87654321");
+        userService.register(student1, "ROLE_STUDENT");
+
+        UserDto student2 = new UserDto();
+        student2.setUsername("student2");
+        student2.setPassword("123");
+        student2.setFullName("Lee Mei Yee");
+        student2.setEmail("student2@hkmu.edu.hk");
+        student2.setPhone("55667788");
+        userService.register(student2, "ROLE_STUDENT");
+    }
+
+    private void createLectures() {
+        List<Lecture> lectures = Arrays.asList(
+                new Lecture("L1: Introduction to Spring Boot", "Overview of the Spring ecosystem and setup."),
+                new Lecture("L2: Dependency Injection & IoC", "Understanding how Spring manages object lifecycles."),
+                new Lecture("L3: Spring Data JPA", "Connecting to H2/MySQL databases using repositories."),
+                new Lecture("L4: REST Controllers", "Building endpoints and handling JSON requests."),
+                new Lecture("L5: Spring Security", "Implementing authentication and JWT tokens."),
+                new Lecture("L6: Deployment with Docker", "Containerizing your Spring application for the cloud.")
+        );
+        lectureRepo.saveAll(lectures);
+    }
+
+    private void createPolls() {
+        // Poll 1: Topic Interest
+        Poll poll1 = new Poll("Which advanced topic would you like a guest lecture on?");
+        pollRepo.save(poll1);
+        pollOptionRepo.saveAll(Arrays.asList(
+                new PollOption("Microservices Architecture", poll1),
+                new PollOption("Cloud Native (AWS/Azure)", poll1),
+                new PollOption("Reactive Programming (WebFlux)", poll1)
+        ));
+
+        // Poll 2: Course Pace
+        Poll poll2 = new Poll("How do you find the current pace of the course?");
+        pollRepo.save(poll2);
+        pollOptionRepo.saveAll(Arrays.asList(
+                new PollOption("Too fast - I'm struggling", poll2),
+                new PollOption("Just right - Keep going", poll2),
+                new PollOption("Too slow - Let's speed up", poll2)
+        ));
+
+        // Poll 3: Project Preference
+        Poll poll3 = new Poll("What kind of project would you prefer for the final assessment?");
+        pollRepo.save(poll3);
+        pollOptionRepo.saveAll(Arrays.asList(
+                new PollOption("E-commerce Website", poll3),
+                new PollOption("Social Media Platform", poll3),
+                new PollOption("Real-time Chat App", poll3),
+                new PollOption("Inventory Management System", poll3)
+        ));
     }
 }
