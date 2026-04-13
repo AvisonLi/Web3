@@ -34,13 +34,10 @@ public class DataInitializer implements CommandLineRunner {
     public void run(String... args) throws Exception {
         if (userService.findAll().isEmpty()) {
 
-            // --- 1. Users ---
             createUsers();
 
-            // --- 2. Lectures ---
             createLectures();
 
-            // --- 3. Polls and Options ---
             createPolls();
 
             System.out.println(">>> Initial data for HKMU Online Course has been successfully loaded!");
@@ -86,7 +83,6 @@ public class DataInitializer implements CommandLineRunner {
     }
 
     private void createPolls() {
-        // Poll 1: Topic Interest
         Poll poll1 = new Poll("Which advanced topic would you like a guest lecture on?");
         pollRepo.save(poll1);
         pollOptionRepo.saveAll(Arrays.asList(
@@ -95,7 +91,6 @@ public class DataInitializer implements CommandLineRunner {
                 new PollOption("Reactive Programming (WebFlux)", poll1)
         ));
 
-        // Poll 2: Course Pace
         Poll poll2 = new Poll("How do you find the current pace of the course?");
         pollRepo.save(poll2);
         pollOptionRepo.saveAll(Arrays.asList(
@@ -104,7 +99,6 @@ public class DataInitializer implements CommandLineRunner {
                 new PollOption("Too slow - Let's speed up", poll2)
         ));
 
-        // Poll 3: Project Preference
         Poll poll3 = new Poll("What kind of project would you prefer for the final assessment?");
         pollRepo.save(poll3);
         pollOptionRepo.saveAll(Arrays.asList(
